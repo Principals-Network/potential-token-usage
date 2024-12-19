@@ -375,6 +375,93 @@ class ConversationCoordinator:
         # Save the report
         self.save_report(report)
 
+        # Financial Principal Analysis
+        await self._conduct_financial_analysis(report)
+
+    async def _conduct_financial_analysis(self, career_report: Dict):
+        """Phase 4: PNET Token Allocation and Educational Investment Planning"""
+        print("\n=== Phase 4: Educational Investment Planning ===")
+        print("Our Financial Principal will now analyze your career plan and allocate PNET tokens for your educational journey.")
+
+        # Find Financial Principal
+        financial_principal = next(
+            (principal for name, principal in self.principals.items() 
+             if "Financial Principal" in name),
+            None
+        )
+
+        if not financial_principal:
+            print("\nFinancial Principal not available. Skipping token allocation.")
+            return
+
+        try:
+            # Prepare context for financial analysis
+            financial_context = {
+                "career_report": career_report,
+                "user_info": self.user_info,
+                "conversation_history": self.conversation_history
+            }
+
+            # Get financial analysis
+            financial_analysis = await financial_principal.analyze(financial_context)
+
+            # Present token allocation and investment plan
+            await self._present_financial_analysis(financial_analysis)
+
+        except Exception as e:
+            self.logger.error(f"Error in financial analysis: {e}")
+            print("\nError generating financial analysis. Please try again later.")
+
+    async def _present_financial_analysis(self, analysis: Dict):
+        """Present token allocation and investment plan to the user"""
+        print("\n=== PNET Token Allocation and Investment Plan ===")
+        
+        # User Wallet Information
+        print("\nWallet Details:")
+        print(f"Wallet ID: {analysis['user_wallet']['wallet_id']}")
+        print(f"Network: {analysis['user_wallet']['network']}")
+        print(f"Token: {analysis['user_wallet']['token_symbol']}")
+        
+        # Token Allocation
+        allocation = analysis['token_allocation']
+        print("\nToken Allocation:")
+        print(f"Base Allocation: {allocation['base_allocation']} PNET")
+        print(f"Career Clarity Bonus: {allocation['career_clarity_bonus']} PNET")
+        print(f"Technical Focus Bonus: {allocation['technical_focus_bonus']} PNET")
+        print(f"Leadership Bonus: {allocation['leadership_bonus']} PNET")
+        print(f"\nFinal Allocation: {allocation['final_allocation']} PNET")
+        
+        # Investment Plan
+        plan = analysis['investment_plan']
+        print("\nRecommended Educational Investment Plan:")
+        print("\nRecommended Academies:")
+        for academy in plan['recommended_academies']:
+            print(f"\n- {academy['name']}")
+            print(f"  Token Requirement: {academy['token_requirement']} PNET")
+            print(f"  Duration: {academy['duration']}")
+            print(f"  Focus Areas: {', '.join(academy['focus_areas'])}")
+        
+        # Token Utilization
+        print("\nRecommended Token Utilization:")
+        for category, percentage in plan['token_utilization'].items():
+            print(f"- {category.replace('_', ' ').title()}: {percentage}")
+        
+        # Timeline
+        print("\nEducational Timeline:")
+        for period, activity in plan['timeline'].items():
+            print(f"- {period.replace('_', ' ').title()}: {activity}")
+        
+        # Transaction Details
+        transaction = analysis['transaction_details']
+        print("\nTransaction Details:")
+        print(f"Amount: {transaction['amount']} {transaction['token']}")
+        print(f"From: {transaction['from_wallet']}")
+        print(f"To: {transaction['to_wallet']}")
+        print(f"Status: {transaction['status']}")
+        
+        print("\nNote: These tokens will be transferred to your wallet upon approval.")
+        print("You can use them to access our AI academies and participate in the DAO.")
+
     def save_report(self, report: Dict, filename: str = "career_roadmap.txt"):
         """Save the career roadmap to a file"""
         try:
